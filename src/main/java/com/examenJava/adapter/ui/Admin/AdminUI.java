@@ -22,16 +22,14 @@ public class AdminUI {
     public void mostrarMenu() {
         while (true) {
             ConsoleUtils.clear();
-            final String RESET = "\u001B[0m";
-            final String CYAN_BOLD = "\u001B[1;36m";
             System.out.println("\n╔════════════════════════════════════════════╗");
             System.out.println("║          PANEL DE ADMINISTRACIÓN           ║");
-            System.out.printf(CYAN_BOLD + "║       Usuario actual: %-23s  ║%n",
-                    currentUser.getnombre() + " (" + currentUser.getRole() + ")" + RESET);
+            System.out.printf("║       Usuario actual: %-23s  ║%n",
+                    currentUser.getnombre() + " (" + currentUser.getRole() + ")");
             System.out.println("╠════════════════════════════════════════════╣");
             System.out.println("║ 1. Registrar nuevo usuario administrativo  ║");
             System.out.println("║ 2. Listar todos los usuarios               ║");
-            System.out.println("║ 3. Panel de control                        ║");
+            System.out.println("║ 3. Vista Admin                             ║");
             System.out.println("║ 4. Cerrar sesión                           ║");
             System.out.println("╚════════════════════════════════════════════╝");
             System.out.print("Elija una opción: ");
@@ -41,7 +39,6 @@ public class AdminUI {
             switch (option) {
                 case 1 -> registerAdminUser();
                 case 2 -> listUsuarios();
-                case 3 -> mostrarPanelControl();
                 case 4 -> {
                     return;
                 }
@@ -73,11 +70,6 @@ public class AdminUI {
         return obtenerOpcionValida(1, 4);
     }
 
-    private void mostrarPanelControl() {
-        ControlAdminUi adminUi = new ControlAdminUi(scanner, userService, currentUser);
-        adminUi.start();
-    }
-
     private void registerAdminUser() {
         ConsoleUtils.clear();
         System.out.println("\n╔═════════════════════════════════════════╗");
@@ -90,11 +82,11 @@ public class AdminUI {
             username = scanner.nextLine().trim();
         } while (username.length() < 3);
 
-        String password;
+        String contrasena;
         do {
-            System.out.print("║ Password (mín. 8 caracteres): ");
-            password = scanner.nextLine().trim();
-        } while (password.length() < 8);
+            System.out.print("║ contrasena (mín. 8 caracteres): ");
+            contrasena = scanner.nextLine().trim();
+        } while (contrasena.length() < 8);
 
         System.out.println("║ Seleccione el rol:");
         System.out.println("║ 1. ADMIN");
@@ -110,14 +102,14 @@ public class AdminUI {
             default -> "CASHIER";
         };
 
-        User nuevoUsuario = new User(username, password, rol);
+        User nuevoUsuario = new User(username, contrasena, rol);
         User usuarioRegistrado = userService.register(nuevoUsuario, true);
 
         System.out.println("╔══════════════════════════════╗");
         System.out.println("║     Registrado con éxito!    ║");
         System.out.println("╠══════════════════════════════╣");
         System.out.printf("║ %-15s ║ %-10s ║%n", "ID", usuarioRegistrado.getId());
-        System.out.printf("║ %-15s ║ %-10s ║%n", "Usuario", usuarioRegistrado.getUsername());
+        System.out.printf("║ %-15s ║ %-10s ║%n", "Usuario", usuarioRegistrado.getnombre());
         System.out.printf("║ %-15s ║ %-10s ║%n", "Rol", usuarioRegistrado.getRole());
         System.out.println("╚══════════════════════════════╝");
     }
@@ -142,7 +134,7 @@ public class AdminUI {
             users.forEach(user -> System.out.printf(
                     "║ %-2d ║ %-16s ║ %-18s ║ %-10s  ║ %-11s ║%n",
                     user.getId(),
-                    user.getUsername(),
+                    user.getnombre(),
                     user.getCreated_at().toString().substring(0, 16),
                     user.getRole(),
                     user.isActive() ? "Sí" : "No"));

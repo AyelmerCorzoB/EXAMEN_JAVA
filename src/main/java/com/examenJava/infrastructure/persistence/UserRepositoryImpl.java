@@ -19,13 +19,13 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User guardar(User user) {
-        String sql = "INSERT INTO User (nombre, password, role, active, created_at) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO User (nombre, contrasena, role, active, created_at) VALUES (?, ?, ?, ?, ?)";
         
         try (Connection conn = connection.getConexion();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             
             stmt.setString(1, user.getnombre());
-            stmt.setString(2, user.getPassword());
+            stmt.setString(2, user.getcontrasena());
             stmt.setString(3, user.getRole());
             stmt.setBoolean(4, user.isActive());
             stmt.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
@@ -88,13 +88,13 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void actualizar(User user) {
-        String sql = "UPDATE User SET nombre = ?, password = ?, role = ?, active = ?, last_login = ? WHERE id = ?";
+        String sql = "UPDATE User SET nombre = ?, contrasena = ?, role = ?, active = ?, last_login = ? WHERE id = ?";
 
         try (Connection conn = connection.getConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, user.getnombre());
-            stmt.setString(2, user.getPassword());
+            stmt.setString(2, user.getcontrasena());
             stmt.setString(3, user.getRole());
             stmt.setBoolean(4, user.isActive());
             stmt.setTimestamp(5, user.getLast_login());
@@ -151,7 +151,7 @@ public class UserRepositoryImpl implements UserRepository {
         User user = new User();
         user.setId(rs.getInt("id"));
         user.setnombre(rs.getString("nombre"));
-        user.setPassword(rs.getString("password"));
+        user.setcontrasena(rs.getString("contrasena"));
         user.setRole(rs.getString("role"));
         user.setActive(rs.getBoolean("active"));
         user.setCreated_at(rs.getTimestamp("created_at"));

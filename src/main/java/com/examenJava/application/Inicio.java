@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 import com.examenJava.adapter.global.ConsoleUtils;
+import com.examenJava.adapter.ui.Admin.AdminUI;
+import com.examenJava.domain.entities.Paciente;
 import com.examenJava.domain.entities.User;
 import com.examenJava.domain.repository.PacienteRepository;
 import com.examenJava.domain.service.UserService;
@@ -37,12 +39,12 @@ public class Inicio {
         while (true) {
             ConsoleUtils.clear();
             System.out.println(CYAN_BOLD + "╔═════════════════════════════╗");
-            System.out.println("║ Bienvenido al Sports Center ║");
+            System.out.println("║ Bienvenido A Citas Médicas  ║");
             System.out.println("╠═════════════════════════════╣");
             System.out.println("║ 1. Login                    ║");
             System.out.println("║ 2. Registrarse              ║");
             System.out.println("║ 3. Salir                    ║");
-            System.out.println("╚═════════════════════════════╝"+RESET);
+            System.out.println("╚═════════════════════════════╝" + RESET);
             System.out.print("Elija una opción: ");
 
             int option = obtenerOpcionValida(1, 3);
@@ -98,10 +100,10 @@ public class Inicio {
         String nombre = scanner.nextLine();
 
         System.out.print(CYAN_BOLD + "║ " + RESET + " ° Contraseña: ");
-        String password = scanner.nextLine();
+        String contrasena = scanner.nextLine();
         System.out.println(CYAN_BOLD + "╚════════════════════════════════════╝" + RESET);
 
-        User user = userService.authenticate(nombre, password);
+        User user = userService.authenticate(nombre, contrasena);
 
         if (user != null) {
             this.currentUser = user;
@@ -132,28 +134,6 @@ public class Inicio {
                 AdminUI adminUI = new AdminUI(scanner, userService, currentUser);
                 adminUI.mostrarMenu();
             }
-            case "CASHIER" -> {
-                CashierUI cashierUI = new CashierUI(scanner, currentUser, saleUseCase, saleDetailUseCase,
-                        invoiceUseCase, reportUseCase);
-                cashierUI.mostrarMenuPrincipal();
-            }
-            case "INVENTORY" -> {
-                InventoryUi inventoryUI = new InventoryUi(scanner, productUseCase, ListProducts, currentUser,
-                        productRepository, userService);
-                inventoryUI.mostrarMenu();
-            }
-            case "CONSUMER" -> {
-                ConsumerUI consumerUI = new ConsumerUI(
-                        scanner,
-                        productUseCase,
-                        currentUser,
-                        ListProducts,
-                        ListSalesPorUsuario,
-                        ListInvoice,
-                        UpdatePassword,
-                        invoiceUseCase);
-                consumerUI.mostrarMenuPrincipal();
-            }
         }
         this.currentUser = null;
     }
@@ -167,7 +147,7 @@ public class Inicio {
             System.out.println("\nRegistro de usuario exitoso! ID: " + registeredUser.getId());
 
             System.out.println("Ahora complete sus datos como cliente:");
-            solicitarDatosCustomer(registeredUser);
+            solicitarDatosPaciente(registeredUser);
 
             System.out.println("\nRegistro completo! Ahora puedes iniciar sesión como CONSUMER.");
         } else {
@@ -180,33 +160,36 @@ public class Inicio {
         System.out.print("nombre: ");
         String nombre = scanner.nextLine();
 
-        System.out.print("Password: ");
-        String password = scanner.nextLine();
+        System.out.print("contrasena: ");
+        String contrasena = scanner.nextLine();
 
-        return new User(nombre, password, "CONSUMER");
+        return new User(nombre, contrasena, "CONSUMER");
     }
 
-    private void solicitarDatosCustomer(User user) {
-        System.out.print("\nNombre completo: ");
-        String name = scanner.nextLine();
+    private void solicitarDatosPaciente(User user) {
+        System.out.print("\nPrimer Nombre: ");
+        String nombre = scanner.nextLine();
 
-        System.out.print("Documento de identidad: ");
-        String identityDocument = scanner.nextLine();
+        System.out.print("Primer Apellido: ");
+        String apellido = scanner.nextLine();
+
+        System.out.print("Fecha de Nacimiento (YYYY-MM-DD): ");
+        String fechaNacimiento = scanner.nextLine();
 
         System.out.print("Teléfono: ");
-        String phone = scanner.nextLine();
+        int telefono = scanner.nextInt();
+        scanner.nextLine();
 
         System.out.print("Dirección: ");
-        String address = scanner.nextLine();
+        String direccion = scanner.nextLine();
 
-        pacienteRepository.guardarCliente(
-                1,
-                name,
-                identityDocument,
-                phone,
-                address,
-                LocalDate.now(),
-                user.getId());
+        System.out.println("Correo Electronico:");
+        String email = scanner.nextLine();
+
+        LocalDate registrationDate = LocalDate.now();
+
+        pacienteRepository.guardarPaciente(nombre, apellido, email, fechaNacimiento,String.valueOf(telefono), direccion,
+                registrationDate);
     }
 
     public static void main(String[] args) {

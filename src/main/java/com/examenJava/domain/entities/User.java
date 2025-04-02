@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class User {
     private int id;
     private String nombre;
-    private String password;
+    private String contrasena;
     private String role;
     private boolean active;
     private Timestamp created_at;
@@ -14,9 +14,9 @@ public class User {
     public User() {
     }
 
-    public User(String nombre, String password, String role) {
+    public User(String nombre, String contrasena, String role) {
         this.nombre = nombre;
-        this.password = password;
+        this.contrasena = contrasena;
         this.role = role;
         this.active = true;
     }
@@ -37,12 +37,12 @@ public class User {
         this.nombre = nombre;
     }
 
-    public String getPassword() {
-        return password;
+    public String getcontrasena() {
+        return contrasena;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setcontrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 
     public String getRole() {

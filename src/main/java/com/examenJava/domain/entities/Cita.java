@@ -7,7 +7,7 @@ public class Cita {
     private int pacienteId;
     private int medicoId;
     private LocalDateTime fechaHora;
-    private String estado; // "programada", "completada", "cancelada", "no_asistio"
+    private String estado;
     private String motivo;
     private String notas;
     private LocalDateTime createdAt;

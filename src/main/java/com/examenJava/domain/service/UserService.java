@@ -22,10 +22,10 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User authenticate(String nombre, String password) {
+    public User authenticate(String nombre, String contrasena) {
         User user = userRepository.buscarPorNombre(nombre);
         
-        if (user == null || !user.getPassword().equals(password)) {
+        if (user == null || !user.getcontrasena().equals(contrasena)) {
             return null;
         }
     
@@ -44,8 +44,8 @@ public class UserService {
         try {
 
             if (user.getnombre() == null || user.getnombre().isEmpty() ||
-                    user.getPassword() == null || user.getPassword().isEmpty()) {
-                System.err.println("Error: nombre y password son obligatorios");
+                    user.getcontrasena() == null || user.getcontrasena().isEmpty()) {
+                System.err.println("Error: nombre y contrasena son obligatorios");
                 return null;
             }
 

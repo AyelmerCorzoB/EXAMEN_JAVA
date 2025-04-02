@@ -1,7 +1,11 @@
 package com.examenJava;
 
+import com.examenJava.adapter.global.ConsoleUtils;
+import com.examenJava.application.Inicio;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        ConsoleUtils.clear();
+        Inicio.main(args);
     }
 }
